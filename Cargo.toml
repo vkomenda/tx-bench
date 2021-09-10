@@ -1,0 +1,16 @@
+[package]
+name = "tx-bench"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = "2.33.1"
+log = "0.4.14"
+solana-client = "1.7.11"
+solana-core = "1.7.11"
+solana-sdk = "1.7.11"
+spl-token = "3.2"
+spl-associated-token-account = "1.0"
+spl-memo = "3.0.1"

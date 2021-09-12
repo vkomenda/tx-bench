@@ -32,16 +32,16 @@ impl<'a, S: Signer> TxBuilder<'a, S> {
         self.instructions.push(instruction);
     }
 
-    // pub fn create_account(&mut self, account: &'a S, size: usize, owner: &Pubkey, rent: &Rent) {
-    //     self.signers.push(account);
-    //     self.add_instruction(system_instruction::create_account(
-    //         &self.fee_payer,
-    //         &account.pubkey(),
-    //         rent.minimum_balance(size),
-    //         size as u64,
-    //         owner,
-    //     ));
-    // }
+    pub fn create_account(&mut self, account: &'a S, size: usize, owner: &Pubkey, rent: &Rent) {
+        self.signers.push(account);
+        self.add_instruction(system_instruction::create_account(
+            &self.fee_payer,
+            &account.pubkey(),
+            rent.minimum_balance(size),
+            size as u64,
+            owner,
+        ));
+    }
 
     pub fn create_mint_account(
         &mut self,
@@ -63,29 +63,29 @@ impl<'a, S: Signer> TxBuilder<'a, S> {
         );
     }
 
-    pub fn create_token_account(
-        &mut self,
-        account: &'a S,
-        mint: &Pubkey,
-        authority: &Pubkey,
-        rent: &Rent,
-    ) {
-        self.create_account(
-            account,
-            spl_token::state::Account::LEN,
-            &spl_token::id(),
-            rent,
-        );
-        self.add_instruction(
-            spl_token::instruction::initialize_account2(
-                &spl_token::id(),
-                &account.pubkey(),
-                mint,
-                authority,
-            )
-            .unwrap(), // initialize_account2 never returns an Err
-        );
-    }
+    // pub fn create_token_account(
+    //     &mut self,
+    //     account: &'a S,
+    //     mint: &Pubkey,
+    //     authority: &Pubkey,
+    //     rent: &Rent,
+    // ) {
+    //     self.create_account(
+    //         account,
+    //         spl_token::state::Account::LEN,
+    //         &spl_token::id(),
+    //         rent,
+    //     );
+    //     self.add_instruction(
+    //         spl_token::instruction::initialize_account2(
+    //             &spl_token::id(),
+    //             &account.pubkey(),
+    //             mint,
+    //             authority,
+    //         )
+    //         .unwrap(), // initialize_account2 never returns an Err
+    //     );
+    // }
 
     pub fn create_associated_token_account(&mut self, primary: &Pubkey, mint: &Pubkey) -> Pubkey {
         let account = spl_associated_token_account::get_associated_token_address(primary, mint);
